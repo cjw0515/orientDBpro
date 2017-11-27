@@ -5,6 +5,7 @@ app.set('views','./views_orientdb');
 app.set('view engine', 'jade');
 
 //==================db연결부분==========================
+//깃 테스트
 var OrientDB = require('orientjs');
 
 var server = OrientDB({
