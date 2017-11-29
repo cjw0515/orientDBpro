@@ -73,11 +73,40 @@ app.post('/topic/add',function(req, res){
     //res.send(results[0]['@rid']);
     res.redirect('/topic/'+ encodeURIComponent(results[0]['@rid']));
   });
-
-
 });
-
-
+app.get('/topic/:id/edit',function(req, res){
+  var sql = 'select from topic';
+  var id = req.params.id;
+  db.query(sql).then(function(topics){
+    sql = 'select from topic where @rid=:id'
+    var param = {
+      params:{
+        id:id
+      }
+    }
+    db.query(sql,param).then(function(topic){
+        res.render('edit',{topics:topics,topic:topic[0]});
+    });
+  })
+});
+app.post('/topic/:id/edit',function(req, res){
+  var sql = 'UPDATE topic set title=:t, description=:d, author=:a where @rid=:id';
+  var id = req.params.id;
+  var title = req.body.title;
+  var description = req.body.description;
+  var author = req.body.author;
+  var param = {
+    params:{
+      t:title
+      ,d:description
+      ,a:author
+      ,id:id
+    }
+  }
+  db.query(sql,param).then(function(topics){
+    res.redirect('/topic/'+encodeURIComponent(id));
+  })
+});
 
 
 
