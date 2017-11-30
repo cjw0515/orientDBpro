@@ -108,6 +108,35 @@ app.post('/topic/:id/edit',function(req, res){
   })
 });
 
+app.get('/topic/:id/delete',function(req, res){
+  var sql = 'select from topic';
+  var id = req.params.id;
+  db.query(sql).then(function(topics){
+    sql = 'select from topic where @rid=:id'
+    var param = {
+      params:{
+        id:id
+      }
+    }
+    db.query(sql,param).then(function(topic){
+        res.render('delete',{topics:topics,topic:topic[0]});
+    });
+  })
+});
+
+app.post('/topic/:id/delete',function(req, res){
+  var sql = 'delete from topic where @rid=:id';
+  var id = req.params.id;
+  var param = {
+    params:{
+      id:id
+    }
+  }
+  db.query(sql,param).then(function(topics){
+    res.redirect('/topic/');
+  })
+});
+
 
 
 app.listen(3000, function(){
